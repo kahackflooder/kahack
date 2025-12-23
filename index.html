@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Kahack</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+  font-family: 'Inter', -apple-system, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.card {
+  background: linear-gradient(145deg, #252547, #1e1e3f);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 24px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 60px rgba(139, 92, 246, 0.15);
+}
+
+/* Wide rectangle on desktop */
+@media (min-width: 768px) {
+  .card {
+    max-width: 650px;
+    padding: 48px 60px;
+  }
+  
+  .row {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .btn-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+  }
+  
+  .btn-row .btn {
+    margin-top: 0;
+  }
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.logo h1 {
+  font-size: 36px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #a78bfa, #c084fc, #e879f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo p {
+  font-size: 13px;
+  color: #7c7c9a;
+  margin-top: 4px;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #a5a5c7;
+  margin-bottom: 8px;
+}
+
+.field input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(139, 92, 246, 0.08);
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #a78bfa;
+  background: rgba(139, 92, 246, 0.15);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+
+.field input::placeholder { color: #6b6b8a; }
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-start {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7, #c026d3);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+}
+
+.btn-start:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(139, 92, 246, 0.5);
+}
+
+.btn-kill {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 2px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-kill:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.stat {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
+
+.stat.good { 
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+.stat.bad { 
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.stat-num {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.stat.good .stat-num { color: #4ade80; }
+.stat.bad .stat-num { color: #f87171; }
+
+.stat-label {
+  font-size: 12px;
+  color: #8b8bab;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 999;
+  box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+}
+
+#toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12px;
+  color: #5c5c7a;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <h1>Kahack</h1>
+    <p>Bot Flooder</p>
+  </div>
+
+  <div class="field">
+    <label>Game PIN</label>
+    <input type="text" id="gamePin" placeholder="Enter game PIN" maxlength="10" autocomplete="off">
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label>Bot Name</label>
+      <input type="text" id="botName" value="Bot" placeholder="Bot">
+    </div>
+    <div class="field">
+      <label>Count</label>
+      <input type="number" id="botCount" value="10" min="1" max="2000">
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-start" id="startBtn" onclick="startFlood()">Start Flood</button>
+    <button class="btn btn-kill" id="killBtn" onclick="killAll()">Kill All</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat good">
+      <div class="stat-num" id="joinedCount">0</div>
+      <div class="stat-label">Joined</div>
+    </div>
+    <div class="stat bad">
+      <div class="stat-num" id="failedCount">0</div>
+      <div class="stat-label">Failed</div>
+    </div>
+  </div>
+
+  <div class="footer">© 2025 Kahack</div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// Backend URLs - try cloudflare first, fallback to local
+const BACKENDS = [
+  'https://transformation-interstate-demands-overhead.trycloudflare.com',
+  ''  // empty = relative/local
+];
+
+// Smart fetch - tries each backend
+async function apiFetch(path, options = {}) {
+  for (const base of BACKENDS) {
+    try {
+      const url = base + path;
+      const r = await fetch(url, { ...options, signal: AbortSignal.timeout(5000) });
+      if (r.ok) return r;
+    } catch(e) {}
+  }
+  throw new Error('All backends failed');
+}
+
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// Update stats
+function updateStats(s) {
+  document.getElementById('joinedCount').textContent = s.joined || 0;
+  document.getElementById('failedCount').textContent = s.failed || 0;
+}
+
+// Poll server
+async function pollStats() {
+  try {
+    const r = await apiFetch('/api/bots');
+    if (r.ok) updateStats(await r.json());
+  } catch(e) {}
+}
+
+// Start flood
+async function startFlood() {
+  const pin = document.getElementById('gamePin').value.trim();
+  const baseName = document.getElementById('botName').value.trim() || 'Bot';
+  const count = parseInt(document.getElementById('botCount').value) || 10;
+
+  if (!pin || !/^\d+$/.test(pin)) {
+    showToast('Enter a valid PIN');
+    return;
+  }
+
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true;
+  btn.textContent = 'Starting...';
+  
+  try {
+    const r = await apiFetch('/api/spawn', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin, count, baseName })
+    });
+    const d = await r.json();
+    showToast(r.ok ? `Spawning ${count} bots` : (d.error || 'Failed'));
+  } catch(e) {
+    showToast('Connection error');
+  }
+  
+  btn.disabled = false;
+  btn.textContent = 'Start Flood';
+}
+
+// Kill all
+async function killAll() {
+  const btn = document.getElementById('killBtn');
+  btn.disabled = true;
+  btn.textContent = 'Killing...';
+  
+  try {
+    const r = await apiFetch('/api/kill-all', { method: 'POST' });
+    const d = await r.json();
+    showToast(r.ok ? `Killed ${d.killed} bots` : 'Kill failed');
+    document.getElementById('joinedCount').textContent = '0';
+    document.getElementById('failedCount').textContent = '0';
+  } catch(e) {
+    showToast('Connection error');
+  }
+  
+  btn.disabled = false;
+  btn.textContent = 'Kill All';
+  setTimeout(pollStats, 500);
+}
+
+// Init
+setInterval(pollStats, 1000);
+</script>
+
+</body>
+</html>
