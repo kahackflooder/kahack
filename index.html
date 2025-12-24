@@ -461,18 +461,25 @@ body {
 
 <div id="toast"></div>
 
-<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-// Backend URLs - local first, then any configured tunnel
-const BACKENDS = [
-  '',  // empty = relative/local (try first)
-  'https://config-melbourne-comparative-employer.trycloudflare.com'
-];
+// Backend URL - set to your server
+const BACKEND = 'https://marriage-missions-tackle-wife.trycloudflare.com';
 
-// Socket.IO for real-time updates
-const socket = io();
+// Socket.IO for real-time updates - connect to backend
+const socket = io(BACKEND);
 let currentQuestionIndex = -1;
 let answered = true;
+
+// Smart fetch - uses backend URL
+async function apiFetch(path, options = {}) {
+  try {
+    const r = await fetch(BACKEND + path, { ...options, signal: AbortSignal.timeout(5000) });
+    return r;
+  } catch(e) {
+    throw new Error('Backend connection failed');
+  }
+}
 
 // Socket event handlers
 socket.on('botJoinSuccess', (data) => {
@@ -529,18 +536,6 @@ function addLog(msg, type = 'info') {
   logsEl.prepend(p);
   // Keep only last 50 logs
   while (logsEl.children.length > 50) logsEl.removeChild(logsEl.lastChild);
-}
-
-// Smart fetch - tries each backend
-async function apiFetch(path, options = {}) {
-  for (const base of BACKENDS) {
-    try {
-      const url = base + path;
-      const r = await fetch(url, { ...options, signal: AbortSignal.timeout(3000) });
-      if (r.ok) return r;
-    } catch(e) {}
-  }
-  throw new Error('All backends failed');
 }
 
 // Toast
