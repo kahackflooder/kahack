@@ -1,0 +1,56 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 5732350
+Player: yousuck21-szu
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): XgdsWVEgRnt2OgA+bjcJJXxvAUJhBUdfcwhxAT1tF18Ofz4mN1sBVEQdYX0NLQZLSUIzDn5RXQVMd1sLBV9FWG4pUg90FjsNQmsEVg5fD1lXC1sjXH4SdVIMXy9adHEO
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 265508
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: b4585e787f0c3cda00962c4c2216b5c718fed6b67d091ee836df0cf974b8319d1fc63dcf24f0bcaececa15e6c80e334a
+[DEBUG] Token: b4585e787f0c3cda00962c4c2216b5c718fed6b67d091ee836df0cf974b8319d1fc63dcf24f0bcaececa15e6c80e334a
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/5732350/b4585e787f0c3cda00962c4c2216b5c718fed6b67d091ee836df0cf974b8319d1fc63dcf24f0bcaececa15e6c80e334a
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bzlsjhg0w5ag0g56rgabk69i571v
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck21-szu
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 1065555722
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: AdorableSeal80
+   Player CID: 1065555722
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

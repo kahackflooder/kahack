@@ -1,0 +1,71 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 7599004
+Player: Bot7-9ck
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): CG03ZXMzamICAw50aVUUNHtyPgdfZHIDBGMJVFwYQycGaFwxFjthbEMHAj8HaxB6Ul8CaiZZUl5eMBBYBQ9GXU8NEHpNSw0QfgsOcUIIBX9hYGB4ViJjMgFVKltbay9x
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 1617
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: 86f75e011a9291ba08f68744d1cb3a5b994bfe399e5e77c1cac6e2fe6efa3d0288b973bb7381587096987e4af3d381a7
+[DEBUG] Token: 86f75e011a9291ba08f68744d1cb3a5b994bfe399e5e77c1cac6e2fe6efa3d0288b973bb7381587096987e4af3d381a7
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/7599004/86f75e011a9291ba08f68744d1cb3a5b994bfe399e5e77c1cac6e2fe6efa3d0288b973bb7381587096987e4af3d381a7
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bppl15dx9g5sc2p0ibpe0rl3p3dgg
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login Bot7-9ck
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 633798024
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /meta/connect 

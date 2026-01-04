@@ -1,0 +1,56 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 5732350
+Player: yousuck34-nah
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): OgkFbmUfZGRFeAFVGAwhRQ8JAwwIIgQ1YlRXWyEIdF5DDjRhU1gvUh9PZgpsRTAJVRB3X1Yudm1YZFAIFUwCDm4fU0RcbhBeHgx8IG49FgtJUTJnP2pfNzNfMQs+Ylc6
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 3971
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: f2f27d3825febcf2d6e9aecf0930a97e55a427e2e63b04bf1a76ef212228f09d4c4068a9eb1e2ae226c1c3ecbbe9d4ce
+[DEBUG] Token: f2f27d3825febcf2d6e9aecf0930a97e55a427e2e63b04bf1a76ef212228f09d4c4068a9eb1e2ae226c1c3ecbbe9d4ce
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/5732350/f2f27d3825febcf2d6e9aecf0930a97e55a427e2e63b04bf1a76ef212228f09d4c4068a9eb1e2ae226c1c3ecbbe9d4ce
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bzlv7hf6t1te9qke1jndszicl3hft
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck34-nah
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 1467539797
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: PoliteAnt91
+   Player CID: 1467539797
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

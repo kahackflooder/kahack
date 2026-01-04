@@ -1,0 +1,56 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 5114254
+Player: yousuck715-ckr
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): UHIHCnYKfGc4PhRAIiEBYTAED08NEn5EfVkUE35HBAJIeFVkCU1OTFY6MWBQIQptaA9/R1VsUWBadgAuCU5qLU5bAgF/aVEbdGtVWkoCZHJBA35OZmw9QjdbclBwZWNm
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 1621
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: d35b0439acc6fbd0d8447a401bda7457323388893af8db363496c815633a383d6dba534b91d066264b9888a6b8453735
+[DEBUG] Token: d35b0439acc6fbd0d8447a401bda7457323388893af8db363496c815633a383d6dba534b91d066264b9888a6b8453735
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/5114254/d35b0439acc6fbd0d8447a401bda7457323388893af8db363496c815633a383d6dba534b91d066264b9888a6b8453735
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bxz81vrja9casj2fh15uwl474rlk64
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck715-ckr
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 21832983
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: DiplomatBear90
+   Player CID: 21832983
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

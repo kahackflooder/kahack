@@ -1,0 +1,57 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 5732350
+Player: yousuck4-g39
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): Nz4Fe0RGf0ZdQG9eXVAeAlRtf3paPgN8LAt3VV8mBi0NPVUMa3g3eDJ2BFdtamJBfx9UVjtPXmUXfCIFSw90WFcQRWUdURdxBF9iRGI0XXdEIQEWD1VMdAhiVgEBZR19
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 9581
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: ff7484825539b4e073805f32ec559bcecae038b9d38211777dacc554c1f79f65db73fdc205742e644b3cb37033d4f2d1
+[DEBUG] Token: ff7484825539b4e073805f32ec559bcecae038b9d38211777dacc554c1f79f65db73fdc205742e644b3cb37033d4f2d1
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/5732350/ff7484825539b4e073805f32ec559bcecae038b9d38211777dacc554c1f79f65db73fdc205742e644b3cb37033d4f2d1
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bzlk3fzde3tp9hae1np3vjcaeqafm
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck4-g39
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 2120169705
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: BlueSwan2
+   Player CID: 2120169705
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

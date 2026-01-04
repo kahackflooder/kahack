@@ -1,0 +1,70 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 5732350
+Player: yousuck9-u8s
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): YnhnbXZQUDwNCCtcAQ1xQF1GdA9nMmYEU1MBNFkXHmwVDVYGSgJSTwYMQjt4WwdSCwRgXQ8EXlk+JFRrRideCToVRTBiSHoDQFxOZARkQmVXIREjWwYxAAo4ZAJMWgkH
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 16633344
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: 1123963febb50f45e7022a5d5b6e8ab9bd668d997c4b0b1e83126d60dbb92f77ec1d4366907037192bfde2b17b358c8f
+[DEBUG] Token: 1123963febb50f45e7022a5d5b6e8ab9bd668d997c4b0b1e83126d60dbb92f77ec1d4366907037192bfde2b17b358c8f
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/5732350/1123963febb50f45e7022a5d5b6e8ab9bd668d997c4b0b1e83126d60dbb92f77ec1d4366907037192bfde2b17b358c8f
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bzil1p41doga3rj5w149o7ijruj9if
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck9-u8s
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 716710906
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: DiligentBear17
+   Player CID: 716710906
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

@@ -1,0 +1,53 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 5114254
+Player: yousuck831-unj
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): T2Z7UHtOAREDByRUHS9TQkoVVwkiPQ9dDXc6UX4MDkE4A1Uya2IYUg43Xgx2VVtdWW5fMgJQTQVcYgMSNGQBSSlOBVkDcQtdWSpQUWcVfGtleAAFVyBZP1dMXH8+JWFb
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 2381
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: 886f16dfa7e5fbb70ceebfc976f78496bb3f47dfeda56d9555ff8480c43ea599f8083135dfba4b999799fbfdb529bb95
+[DEBUG] Token: 886f16dfa7e5fbb70ceebfc976f78496bb3f47dfeda56d9555ff8480c43ea599f8083135dfba4b999799fbfdb529bb95
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/5114254/886f16dfa7e5fbb70ceebfc976f78496bb3f47dfeda56d9555ff8480c43ea599f8083135dfba4b999799fbfdb529bb95
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: by2h15ijhvuc2kh9c1mp5k58ooj5et
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck831-unj
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 1613892265
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: GeniusChicken13
+   Player CID: 1613892265
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

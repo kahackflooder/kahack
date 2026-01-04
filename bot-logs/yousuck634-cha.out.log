@@ -1,0 +1,58 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 5114254
+Player: yousuck634-cha
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): DD11BlYEEQx/IlIDOyhCTX5WZltAVlZEaypYSgBvDVM2Ew1mM1kdMgUzVVQGeQsNZRhqcUR3AgsOD35eVgpeR1MCX1ExDDJ+ClN8Yl8NXVkmQ0tRQwFRUEVYAwYSN0l1
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 3784
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: 7b5b5ee85f83fb1771764bf23ae6e663aa51e2ed0b0d66a02b126910ba32c284d3d4dfe1b21216ebf92a0145788cda28
+[DEBUG] Token: 7b5b5ee85f83fb1771764bf23ae6e663aa51e2ed0b0d66a02b126910ba32c284d3d4dfe1b21216ebf92a0145788cda28
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/5114254/7b5b5ee85f83fb1771764bf23ae6e663aa51e2ed0b0d66a02b126910ba32c284d3d4dfe1b21216ebf92a0145788cda28
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bxxg15z1m4ggyq8lt1s8ray11s703x
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck634-cha
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 1937193828
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: MightySphinx89
+   Player CID: 1937193828
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

@@ -1,0 +1,56 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 5114254
+Player: yousuck699-rys
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): ND54AXMGeQl3FWcCDV1UDxxVADlBGUNaQxBfOAYmRlN3H0gDB3d1EAQNDW8DKEoDSA9tVVZVIA84fn9vUmELVV0Na2xkEwADQVcOVypgDz9rT3RQCg1DJ3ZTRSMDawJ/
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 28923696
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: dc2613227e48368afd8a3c221f1fcf734c28d06b8aa39d31040a46e5f06727603e056fec79b5c0be5842119f336a3586
+[DEBUG] Token: dc2613227e48368afd8a3c221f1fcf734c28d06b8aa39d31040a46e5f06727603e056fec79b5c0be5842119f336a3586
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/5114254/dc2613227e48368afd8a3c221f1fcf734c28d06b8aa39d31040a46e5f06727603e056fec79b5c0be5842119f336a3586
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bxys184smzsd60x7fno9pavf1sy43
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck699-rys
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 1107444011
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: GreenCat39
+   Player CID: 1107444011
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

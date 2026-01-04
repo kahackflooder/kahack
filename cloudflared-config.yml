@@ -1,0 +1,14 @@
+# Example cloudflared config for a named tunnel.
+# Customize the `tunnel` id and `credentials-file` path after running `cloudflared tunnel create <name>`.
+# Place this file in C:\Users\<you>\.cloudflared\config.yml or pass --config when running cloudflared.
+
+# Replace with the tunnel UUID created by `cloudflared tunnel create <name>`
+tunnel: <TUNNEL-UUID>
+credentials-file: C:\Users\<USERNAME>\.cloudflared\<TUNNEL-UUID>.json
+
+ingress:
+  - hostname: your-subdomain.example.com
+    service: http://localhost:9235
+
+  # Catch-all: return 404 for other requests
+  - service: http_status:404

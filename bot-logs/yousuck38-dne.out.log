@@ -1,0 +1,56 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 5732350
+Player: yousuck38-dne
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): WggLZA8HZ1EDAwJ0AgYPcCt5YHR8cidFbVlhRRx8e1hRICJcWyh8e0NUAytVW1duXE0jcQZjCUtncSkeAwgPBwdwdQhzChQKNkJyPV1VCAJrAQEJXEEpU18NGAZqcyBj
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 5581550
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: 9f0065527c09ee63e82682e57f25d74e3bb64b28691eb13755d3c55224de7995658481ecf09e06b25b2de9b31dde63e7
+[DEBUG] Token: 9f0065527c09ee63e82682e57f25d74e3bb64b28691eb13755d3c55224de7995658481ecf09e06b25b2de9b31dde63e7
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/5732350/9f0065527c09ee63e82682e57f25d74e3bb64b28691eb13755d3c55224de7995658481ecf09e06b25b2de9b31dde63e7
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bzm9szzmw3t6o4vwznasdm4lxv5s
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck38-dne
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 1808279403
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: StellarLizard27
+   Player CID: 1808279403
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

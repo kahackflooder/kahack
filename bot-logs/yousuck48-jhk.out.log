@@ -1,0 +1,57 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 4969059
+Player: yousuck48-jhk
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): YQVgfkhGZWNUUHphX0VgH05MCQNRMmVVbFQCIlg7Q3NdBiFibT1cI0F8VVoHCRUsaGRaR1VQSwtTaQpROQAGXg90dUB2AwlWAkVBCwduV1tRBn1oVFECYBkAXAtdfwha
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 193
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: 63312313d696140f8018de298cdecf15cdc27a8f99a214ea4346dd8f6771d7ee14958328133a19e88d4183b9aba08710
+[DEBUG] Token: 63312313d696140f8018de298cdecf15cdc27a8f99a214ea4346dd8f6771d7ee14958328133a19e88d4183b9aba08710
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/4969059/63312313d696140f8018de298cdecf15cdc27a8f99a214ea4346dd8f6771d7ee14958328133a19e88d4183b9aba08710
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bupf1nyehymk5ynlp9thc9bvvgpm9
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck48-jhk
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 1092784352
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: WingedAnt42
+   Player CID: 1092784352
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

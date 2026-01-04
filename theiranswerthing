@@ -1,0 +1,284 @@
+/**
+ * Handles all default bot actions and dashboard
+ */
+class BotHandler {
+  constructor() {
+    this.addDialog(); // adds the dialog to the web page
+    this.socketHandler = new SocketHandler();
+    this.formHandler = new FormHandler();
+    this.managementModal = document.getElementById("botManagement"); // management modal
+
+    this.#registerHandlers();
+  }
+
+  addDialog() {
+    let dialog = document.createElement("dialog");
+    dialog.id = "botManagement";
+    dialog.innerHTML = `
+            <div class="head">
+                <h3>Kahoot Bot Dashboard</h3>
+                <div class="vertGroup">
+                    <p id="botCount">Bots: 0</p>
+                    <p id="connectedPin">Connected Pin: </p>
+                </div>
+            </div>
+            <div class="answers">
+                <div class="vertGroup">
+                    <h3>Answer Style</h3>
+                    <select id="answer" size="1">
+                        <option id="random" value="random" selected>Random (DEFAULT)</option>
+                        <option id="own" value="own">Choose your own</option>
+                    </select>
+                </div>
+    
+                <div class="answerPicker">
+                    <form id="answerForm">
+                        <button id="red" type="submit" value="0" style="background-color: rgb(226, 27, 60)"><svg viewBox="0 0 32 32" focusable="false" stroke="rgba(0, 0, 0, 0.15)" stroke-width="1.3px" style="paint-order: stroke;" aria-labelledby="label-d043a160-7654-413d-9bec-03d6c1530278" aria-hidden="true" class="icon__Svg-sc-5okv5j-1 evsUjB"><title id="label-d043a160-7654-413d-9bec-03d6c1530278">Icon</title><path style="fill: inherit;" d="M27,24.559972 L5,24.559972 L16,7 L27,24.559972 Z"></path></svg></button>
+                        <button id="blue" type="submit" value="1" style="background-color: rgb(19, 104, 206)"><svg viewBox="0 0 32 32" focusable="false" stroke="rgba(0, 0, 0, 0.15)" stroke-width="1.3px" style="paint-order: stroke;" aria-labelledby="label-c81aa7a3-3bee-4d88-a7a2-92de6dd68c3a" aria-hidden="true" class="icon__Svg-sc-5okv5j-1 evsUjB"><title id="label-c81aa7a3-3bee-4d88-a7a2-92de6dd68c3a">Icon</title><path style="fill: inherit;" d="M4,16.0038341 L16,4 L28,16.0007668 L16,28 L4,16.0038341 Z"></path></svg></button>
+                        <button id="orange" type="submit" value="2" style="background-color: rgb(216, 158, 0)"><svg viewBox="0 0 32 32" focusable="false" stroke="rgba(0, 0, 0, 0.15)" stroke-width="1.3px" style="paint-order: stroke;" aria-labelledby="label-e3bc2fc3-dd37-417c-8e62-e9320d8ef2d9" aria-hidden="true" class="icon__Svg-sc-5okv5j-1 evsUjB"><title id="label-e3bc2fc3-dd37-417c-8e62-e9320d8ef2d9">Icon</title><path style="fill: inherit;" d="M16,27 C9.92486775,27 5,22.0751322 5,16 C5,9.92486775 9.92486775,5 16,5 C22.0751322,5 27,9.92486775 27,16 C27,22.0751322 22.0751322,27 16,27 Z"></path></svg></button>
+                        <button id="green" type="submit" value="3" style="background-color: rgb(38, 137, 12)"><svg viewBox="0 0 32 32" focusable="false" stroke="rgba(0, 0, 0, 0.15)" stroke-width="1.3px" style="paint-order: stroke;" aria-labelledby="label-f9f61201-d307-48d5-b02f-18afbe4ff30c" aria-hidden="true" class="icon__Svg-sc-5okv5j-1 evsUjB"><title id="label-f9f61201-d307-48d5-b02f-18afbe4ff30c">Icon</title><path style="fill: inherit;" d="M7,7 L25,7 L25,25 L7,25 L7,7 Z"></path></svg></button>
+                    </form>
+                </div>
+            </div>
+            <div class="log">
+                <h3>Game Log</h3>
+                <div class="logs">
+    
+                </div>
+            </div>
+            <button id="exit">QUIT Bot</button>
+        `;
+    document.body.appendChild(dialog);
+  }
+
+  /**
+   * Form and dashboard listeners
+   */
+  #registerHandlers() {
+    document.getElementById("exit").addEventListener("click", () => this.exitBot()); // wxit bot
+    document.getElementById("answer").addEventListener("change", (e) => this.#randomAnswer(e));
+    document.getElementById("answerForm").addEventListener("submit", (e) => {
+      e.preventDefault(); // prevent form behavior
+      this.pickAnswer(e);
+    });
+    document.getElementById("form").addEventListener("submit", (e) => {
+      this.formHandler
+        .formSubmitHandler(e)
+        .then((data) => {
+          this.managementModal.showModal();
+          this.socketHandler.addMessage(`📩 Response: ${data.response.text} - ${data.response.description}`, "info");
+          document.getElementById("connectedPin").innerHTML = `Connected Pin: ${data.formInfo.pin}`; // update pin on modal
+        })
+        .catch((e) => {
+          this.buttonError(e); // show error on btn
+        });
+    });
+  }
+
+  /**
+   * Shows an error on form send button
+   * @param error error message
+   */
+  buttonError(error) {
+    let btn = document.getElementById("send");
+    let ogMessage = btn.innerHTML;
+    btn.innerHTML = error.message;
+    setTimeout(() => {
+      btn.innerHTML = ogMessage;
+    }, 5000);
+  }
+
+  /**
+   * Enables answer to be picked, parsed, and sent to server
+   */
+  pickAnswer(event) {
+    event.preventDefault(); // prevent form behavior
+    console.log(`answered? ${this.socketHandler.answered}`);
+    if (this.socketHandler.answered === false) {
+      let answer = event.submitter.value; // 0 = red, 1 = blue, 2 = yellow, 3 = green
+      this.socketHandler.socket.emit("userAnswer", { answer: parseInt(answer) }); // send answer
+    }
+  }
+
+  /**
+   * Disconnects bots from server and exits modal
+   */
+  exitBot() {
+    this.socketHandler.socket.emit("userDisconnect"); // close connection & bots
+    this.managementModal.close(); // close modal
+  }
+
+  /**
+   * Updates whether answer should be random or picked, and displays/hides options
+   */
+  #randomAnswer(event) {
+    let type = event.target.value;
+    let answerForm = document.querySelector("#answerForm");
+    if (type === "own") {
+      answerForm.style.display = "grid"; // show answer picker
+      this.socketHandler.randomAnswer = false;
+    } else {
+      answerForm.style.display = "none"; // hide answer picker
+      if (this.socketHandler.answered === false) {
+        this.socketHandler.socket.emit("userAnswer", { answer: "random" }); // send random answer
+        this.socketHandler.randomAnswer = true;
+      }
+    }
+  }
+}
+
+/**
+ * Handles Socket
+ */
+class SocketHandler {
+  constructor() {
+    this.socket = io("https://kahootbotter.com", { path: "/api/socket" }); //io("https://kahootbotter.com", { path: "/api/socket" });
+    this.randomAnswer = true; // random answer for bots
+    this.clientId = Math.random().toString(36).substring(2, 11);
+    this.answered = true; // question answer state
+    localStorage.setItem("clientId", this.clientId);
+    this.socket.emit("register", this.clientId); // register client id w/ server
+    this.#registerListeners();
+  }
+
+  /**
+   * Adds messages to the log
+   * @param message message
+   * @param type type of message (info, success, error) -- not used atm
+   */
+  addMessage(message, type = "info") {
+    let logs = document.querySelector(".logs");
+
+    let newMessage = document.createElement("p");
+    newMessage.innerHTML = message;
+
+    // Insert the new message at the top
+    logs.prepend(newMessage);
+  }
+
+  /**
+   * Socket Listeners
+   */
+  #registerListeners() {
+    // Handle incoming messages
+    this.socket.on("messages", (data) => {
+      this.addMessage(data, "info");
+    });
+
+    // Bot joined successfully
+    this.socket.on("botJoinSuccess", () => {
+      let botCounter = document.getElementById("botCount");
+      let botCount = parseInt(botCounter.innerHTML.split(" ")[1]);
+      botCounter.innerHTML = "Bots: " + ++botCount;
+    });
+
+    // Bot failed to join
+    this.socket.on("botJoinFail", (data) => {
+      this.addMessage(`⚠️ ${data.message}`, "warning");
+    });
+
+    // Bot failed to spawn
+    this.socket.on("botSpawnError", (data) => {
+      this.addMessage(`❌ Error ${data.code}: ${data.description}`, "error");
+    });
+
+    // Quiz started
+    this.socket.on("quizStarted", (data) => {
+      this.addMessage(`🏆 Quiz has started!`, "success");
+    });
+
+    // Question answered
+    this.socket.on("questionAnswered", (data) => {
+      this.addMessage(`📝 Bots answered ${data.answer}!`, "success");
+      this.answered = true; // disallow new answers
+    });
+
+    // Bot disconnected
+    this.socket.on("botDisconnected", (data) => {
+      let botCounter = document.getElementById("botCount");
+      let botCount = parseInt(botCounter.innerHTML.split(" ")[1]);
+      botCounter.innerHTML = `Bots: ${--botCount}`;
+
+      this.addMessage(`⚠️ ${data.message}`, "warning");
+    });
+
+    // Question started
+    this.socket.on("questionStart", (data) => {
+      // {
+      //     type: question.type,
+      //     layout: question.layout,
+      //     numberOfChoices: question.numberOfChoices,
+      //     time: question.timeAvailable, (ms)
+      //   }
+      // auto select random answer
+      if (this.randomAnswer === true) setTimeout(() => this.socket.emit("userAnswer", { answer: "random" }), 1000);
+      // notify user to select answer
+      else {
+        this.answered = false; // allow new answers
+        this.addMessage("👀 New Question, answer now!"); // new question
+      }
+    });
+  }
+}
+
+/**
+ * Handles Form Actions
+ */
+class FormHandler {
+  constructor() {
+    // field values
+    this.pin = document.getElementById("pin");
+    this.amount = document.getElementById("amount");
+    this.name = document.getElementById("name");
+  }
+
+  /**
+   * Clears field values
+   */
+  clearFields() {
+    this.pin.value = "";
+    this.amount.value = 25;
+    this.name.value = "";
+  }
+
+  /**
+   * Handles form submission
+   */
+  async formSubmitHandler(event) {
+    event.preventDefault(); // prevent form behavior
+
+    // Verify captcha
+    const token = true; //await grecaptcha.execute("6Lda-dQqAAAAAMHyOgRX30MMERCKn4dHqgNOhdDZ", { action: "submit" });
+
+    // store field values
+    const pin = this.pin.value;
+    const amount = this.amount.value;
+    const name = this.name.value || "kahootbotter.com";
+    this.clearFields(); // clear fields
+
+    // Prepare server data
+    const clientId = localStorage.getItem("clientId");
+    localStorage.setItem("clientId", clientId);
+    const response = await fetch("https://kahootbotter.com/api/init", {
+      //fetch("https://kahootbotter.com/api/init", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({ pin, amount, name, clientId, recaptchaToken: token }).toString(),
+    });
+    const data = await response.json(); // Send to server
+
+    return {
+      formInfo: {
+        pin,
+        amount,
+        name,
+      },
+      response: data,
+    };
+  }
+}
+
+// BOOM
+let botHandler = new BotHandler();

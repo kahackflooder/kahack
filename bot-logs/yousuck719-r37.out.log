@@ -1,0 +1,56 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 5114254
+Player: yousuck719-r37
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): amhCR2QIUEFYL3pLM01dWAxbGAVVDS1gaAJQaGkDCFxIAAYCdnVmLn1DX1l3cjtlWwwOLUtYAxpHUjNVWW0jDVJeCFokeQ0OUQkMBXFpAWNsFAwGAF0YfRJYMBI+f14P
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 692580
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: 05057a977b80f4590bba43b17b273c9a1ed2363a930032a18dfe2c9a16cbc8b31117a3b9ade753394a46adc3b9adb1b1
+[DEBUG] Token: 05057a977b80f4590bba43b17b273c9a1ed2363a930032a18dfe2c9a16cbc8b31117a3b9ade753394a46adc3b9adb1b1
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/5114254/05057a977b80f4590bba43b17b273c9a1ed2363a930032a18dfe2c9a16cbc8b31117a3b9ade753394a46adc3b9adb1b1
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: bxz61pwgp7q9kgl1m1uz4egf66zz7h
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login yousuck719-r37
+[DEBUG] RECV: /service/controller loginResponse
+✓ Login successful! CID: 1516899341
+[DEBUG] SEND namerator message
+
+=== SUCCESS ===
+Listening for game events... (Ctrl+C to exit)
+
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/controller 
+[DEBUG] RECV: /service/status status
+✓ Game is ACTIVE
+[DEBUG] RECV: /service/player message
+
+🎉 JOINED AS: RockstarPony13
+   Player CID: 1516899341
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/player message
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 

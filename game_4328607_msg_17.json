@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "gameid": "4328607",
+    "host": "play.kahoot.it",
+    "id": 17,
+    "channel": "/service/player",
+    "cid": "939374032"
+  },
+  "payload": {
+    "data": {},
+    "stableIdentifier": "f8673079-ddc2-4220-9507-72190244bdb8-5",
+    "isHighContrast": false,
+    "teamMembers": [],
+    "loginState": 3,
+    "didControllerLeave": false,
+    "avatarTimestamp": 1765963504450,
+    "wasControllerKicked": false,
+    "state": 0,
+    "availableCollaborations": {
+      "isAutoAssign": false,
+      "canRename": true,
+      "data": [],
+      "collaborationNameLocale": "en"
+    },
+    "chosenCollaborationIndex": -1,
+    "kahootLangIsRTL": false,
+    "avatar": {
+      "type": 3000,
+      "item": 3950
+    },
+    "canChangeAvatar": true,
+    "youtubeAPIKey": "AXH1ezl1Z6hl2fMa2TmvME3V-0gsYP4M-4xLS6wf725yN09BamjeERelDUQOEfzg9qCOVun8KUuBpDpmioBWw5vUq0CHtMcpVExkXKKpPXc2sWn1tviwGf7sIMDwc8jzLKH5oa-uqwBDBhSJWu2ygOeHS_lB89plwQ==",
+    "shouldBlockYouTube": false,
+    "reactions": true,
+    "isTestGameApi": false,
+    "islandData": null,
+    "audienceQuestionsData": null,
+    "controllerEstimateCount": 5
+  }
+}

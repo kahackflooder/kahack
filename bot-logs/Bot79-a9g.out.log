@@ -1,0 +1,39 @@
+
+=== Kahoot Auto-Join ===
+Game PIN: 4911577
+Player: Bot79-a9g
+
+[1/3] Getting session token...
+[DEBUG] Session token (raw): GksEVC4MX1IKDA4sfUxwWWVKbkkEZSN+XXUPXX5VFmgZXk5RBChjTVBeXVd3CiVgTXgSDl9ZWnBkBy5fTUxaLlBCcF0KClokXV4TBAUbTXUyN1lMS0gHF3Qadg19B2ZY
+[DEBUG] Session token length: 128
+[DEBUG] Base64 decoded length: 96
+   ✓ Got session token
+[2/3] Decoding token...
+[DEBUG] Challenge message length: 100
+[DEBUG] Offset: 61596
+[DEBUG] Decoded challenge length: 100
+[DEBUG] Token bytes length: 96
+[DEBUG] Final token length: 96
+[DEBUG] Final token: c1e4a70924aa5580120838a8a8426ef4b0258c156d6c5cc470fb9b5292c9809f312d431d8fdfab12fc0829cc6c6f6f53
+[DEBUG] Token: c1e4a70924aa5580120838a8a8426ef4b0258c156d6c5cc470fb9b5292c9809f312d431d8fdfab12fc0829cc6c6f6f53
+   ✓ Token decoded (length: 96)
+[3/3] Connecting...
+
+[DEBUG] WebSocket URL: wss://kahoot.it/cometd/4911577/c1e4a70924aa5580120838a8a8426ef4b0258c156d6c5cc470fb9b5292c9809f312d431d8fdfab12fc0829cc6c6f6f53
+✓ Connected to WebSocket
+[DEBUG] SEND handshake
+[DEBUG] RECV: /meta/handshake 
+✓ Handshake OK, clientId: 95sx1ahgf0w2qjbo51afi571rf9qqv
+[DEBUG] SEND connect (first)
+[DEBUG] RECV: /meta/connect 
+[DEBUG] SEND connect (second)
+[DEBUG] SEND login Bot79-a9g
+[DEBUG] RECV: /service/status status
+[DEBUG] RECV: /meta/connect 
+[DEBUG] RECV: /service/controller 
+
+⚠ Timeout - check if name appears in Kahoot lobby
+[DEBUG] WebSocket closed: 1005
+
+=== FAILED ===
+Error: Connection closed (1005)
