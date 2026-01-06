@@ -122,7 +122,7 @@ body {
 .field input::placeholder { color: #6b6b8a; }
 
 .checkbox-field {
-  margin-top: 8px;
+  margin-top: 28px;
   margin-bottom: 20px;
 }
 
@@ -150,6 +150,7 @@ body {
   border-radius: 6px;
   position: relative;
   flex-shrink: 0;
+  transform: translate(-3px, 10px);
 }
 
 .checkbox-label input[type="checkbox"]:checked {
@@ -160,13 +161,13 @@ body {
 .checkbox-label input[type="checkbox"]:checked::after {
   content: '';
   position: absolute;
-  left: 6px;
-  top: 2px;
-  width: 6px;
-  height: 12px;
+  left: 50%;
+  top: 45%;
+  width: 5px;
+  height: 10px;
   border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
+  border-width: 0 2.5px 2.5px 0;
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .checkbox-field .hint {
