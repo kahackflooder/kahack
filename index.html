@@ -594,16 +594,70 @@ body {
     <div id="gameLogs"></div>
   </div>
 
-  <div class="footer">© 2025 Kahack</div>
+  <div class="footer">© 2026 Kahack</div>
 </div>
 
 <div id="toast"></div>
 
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-const GITHUB_API_URL = 'https://api.github.com/repos/gameflooder/backend-url/contents/backend.json';
+(function() {
+  const cdns = [
+    'https://cdn.socket.io/4.7.2/socket.io.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js',
+    'https://unpkg.com/socket.io-client@4.7.2/dist/socket.io.min.js',
+    'https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js'
+  ];
+  function loadScript(url) {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = url;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+  async function loadSocketIO() {
+    for (const cdn of cdns) {
+      try { await loadScript(cdn); if (typeof io !== 'undefined') return true; } catch (e) {}
+    }
+    return false;
+  }
+  window.socketIOReady = loadSocketIO();
+})();
+</script>
+<script>
 let BACKEND = null;
 let socket = null;
+const E2E_KEY_HEX = '4b6168616b466c6f6f6465724145533235364743454e435259505433443b2931';
+let e2eKey = null;
+
+async function initE2EKey() {
+  const keyBytes = new Uint8Array(32);
+  for (let i = 0; i < 32; i++) keyBytes[i] = parseInt(E2E_KEY_HEX.substr(i * 2, 2), 16);
+  e2eKey = await crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
+}
+
+async function encryptE2E(data) {
+  if (!e2eKey) await initE2EKey();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encoded = new TextEncoder().encode(JSON.stringify(data));
+  const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, e2eKey, encoded);
+  const combined = new Uint8Array(iv.length + encrypted.byteLength);
+  combined.set(iv);
+  combined.set(new Uint8Array(encrypted), iv.length);
+  return btoa(String.fromCharCode(...combined));
+}
+
+async function decryptE2E(encryptedBase64) {
+  if (!e2eKey) await initE2EKey();
+  const combined = Uint8Array.from(atob(encryptedBase64), c => c.charCodeAt(0));
+  const iv = combined.slice(0, 12);
+  const data = combined.slice(12);
+  const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, e2eKey, data);
+  return JSON.parse(new TextDecoder().decode(decrypted));
+}
+
+function isPrivateModeEnabled() { return true; }
 let currentQuestionIndex = -1;
 let answered = true;
 let socketConnected = false;
@@ -614,33 +668,56 @@ const answerBlocks = new Set();
 const PIN_REGEX = /^\d{4,10}$/;
 const SOCKET_FAIL_MESSAGE = 'External connection failed. Answering is not available right now.';
 const BETTER_JOIN_MESSAGE = 'Better Joining is on. Answering is disabled for this match.';
+const BACKEND_SOURCES = [
+  'https://api.github.com/repos/gameflooder/backend-url/contents/backend.json',
+  'https://raw.githubusercontent.com/gameflooder/backend-url/main/backend.json'
+];
 
 async function loadBackendUrl() {
-  try {
-    const res = await fetch(GITHUB_API_URL, { 
-      cache: 'no-store',
-      headers: { 'Accept': 'application/vnd.github.v3+json' }
-    });
-    const apiData = await res.json();
-    const content = atob(apiData.content.replace(/\s/g, ''));
-    const data = JSON.parse(content);
-    if (data.url) {
-      BACKEND = data.url;
-      console.log('Backend URL loaded:', BACKEND);
-      return true;
-    }
-  } catch (e) {
-    console.error('Failed to load backend URL:', e);
+  for (const source of BACKEND_SOURCES) {
+    try {
+      const res = await fetch(source, { 
+        cache: 'no-store',
+        headers: source.includes('api.github.com') ? { 'Accept': 'application/vnd.github.v3+json' } : {}
+      });
+      if (!res.ok) continue;
+      
+      let data;
+      if (source.includes('api.github.com')) {
+        const apiData = await res.json();
+        const content = atob(apiData.content.replace(/\s/g, ''));
+        data = JSON.parse(content);
+      } else {
+        data = await res.json();
+      }
+      
+      if (data.url) {
+        BACKEND = data.url;
+        return true;
+      }
+    } catch (e) {}
   }
   return false;
 }
 
 async function initApp() {
-  const loaded = await loadBackendUrl();
+  const socketLoaded = await window.socketIOReady;
+  if (!socketLoaded) addLog('⚠️ Socket.IO failed to load', 'warning');
+  
+  let loaded = false;
+  for (let i = 0; i < 3; i++) {
+    loaded = await loadBackendUrl();
+    if (loaded) break;
+    await new Promise(r => setTimeout(r, 1000));
+  }
+  
   if (!loaded) {
-    showToast('Failed to load backend URL from GitHub', 'error');
+    showToast('Failed to connect');
+    addLog('❌ Connection failed', 'error');
     return;
   }
+  
+  addLog('🔐 E2E Encryption enabled', 'success');
 
   const betterJoinToggle = document.getElementById('betterJoin');
   if (betterJoinToggle) {
@@ -663,48 +740,30 @@ function setupSocketListeners() {
     el.textContent = parseInt(el.textContent) + 1;
     addLog(`✅ ${data.name} joined`);
   });
-
   socket.on('botJoinBatch', (data) => {
     const el = document.getElementById('joinedCount');
     el.textContent = parseInt(el.textContent) + data.count;
-    if (data.count > 5) {
-      addLog(`✅ ${data.count} bots joined`);
-    } else {
-      addLog(`✅ ${data.names.join(', ')} joined`);
-    }
+    addLog(`✅ ${data.count} bots joined`);
   });
-
-  socket.on('botJoinFail', (data) => {
-    addLog(`⚠️ ${data.message}`, 'warning');
-  });
-
-  socket.on('botDisconnected', (data) => {
-    addLog(`❌ ${data.name} disconnected`, 'error');
-  });
-
+  socket.on('botJoinFail', (data) => addLog(`⚠️ ${data.message}`, 'warning'));
+  socket.on('botDisconnected', (data) => addLog(`❌ ${data.name} disconnected`, 'error'));
   socket.on('questionStart', (data) => {
     currentQuestionIndex = data.questionIndex;
     answered = false;
     addLog(`🎯 Question ${data.questionIndex + 1} started (${data.choices} choices)`);
-    const btns = document.querySelectorAll('.answer-btn');
-    btns.forEach(b => {
+    document.querySelectorAll('.answer-btn').forEach(b => {
       b.style.animation = 'pulse 0.5s ease-in-out 2';
       setTimeout(() => b.style.animation = '', 1000);
     });
   });
-
   socket.on('questionAnswered', (data) => {
     answered = true;
     const colors = ['Red', 'Blue', 'Yellow', 'Green'];
-    addLog(`📝 Bots answered ${colors[data.answer] || data.answer}!`);
+    addLog(`📝 Bots answered ${colors[data.answer]}!`);
   });
-
-  socket.on('quizStarted', () => {
-    addLog(`🏆 Quiz has started!`);
-  });
-
+  socket.on('quizStarted', () => addLog('🏆 Quiz started!'));
   socket.on('spawnStopped', (data) => {
-    addLog(`⏹️ Spawn stopped: ${data.spawned}/${data.total} bots created`, 'warning');
+    addLog(`⏹️ Stopped: ${data.spawned}/${data.total}`, 'warning');
     document.getElementById('stopBtn').style.display = 'none';
     document.getElementById('startBtn').disabled = false;
     document.getElementById('startBtn').textContent = 'Start Flood';
@@ -714,7 +773,40 @@ function setupSocketListeners() {
 async function apiFetch(path, options = {}) {
   if (!BACKEND) throw new Error('Backend not loaded');
   try {
-    const r = await fetch(BACKEND + path, { ...options, signal: AbortSignal.timeout(5000) });
+    const privateMode = isPrivateModeEnabled();
+    let finalOptions = { ...options, signal: AbortSignal.timeout(5000) };
+    
+    if (privateMode) {
+      // Encrypt the request body if present, or send empty encrypted payload
+      let dataToEncrypt = {};
+      if (options.body) {
+        try { dataToEncrypt = JSON.parse(options.body); } catch(e) { dataToEncrypt = {}; }
+      }
+      dataToEncrypt._path = path; // Include path in encrypted payload for verification
+      const encrypted = await encryptE2E(dataToEncrypt);
+      
+      finalOptions.method = 'POST'; // All E2E requests use POST
+      finalOptions.headers = { ...finalOptions.headers, 'Content-Type': 'application/json', 'X-E2E': '1' };
+      finalOptions.body = JSON.stringify({ e2e: encrypted });
+      
+      // Use unified E2E endpoint and decrypt response
+      const r = await fetch(BACKEND + '/api/e2e', finalOptions);
+      const encryptedResponse = await r.json();
+      
+      // Decrypt the response
+      if (encryptedResponse.e2e) {
+        const decryptedData = await decryptE2E(encryptedResponse.e2e);
+        // Return a fake Response object with decrypted data
+        return {
+          ok: r.ok,
+          status: r.status,
+          json: async () => decryptedData
+        };
+      }
+      return r;
+    }
+    
+    const r = await fetch(BACKEND + path, finalOptions);
     return r;
   } catch(e) {
     throw new Error('Backend connection failed');
@@ -783,36 +875,20 @@ async function pollStats() {
 }
 
 function handleSocketFailure(message = SOCKET_FAIL_MESSAGE) {
-  if (socketFailed) return; // Already failed, don't spam
+  if (socketFailed) return;
   socketConnected = false;
   socketFailed = true;
-  addLog('⚠️ Socket.IO connection failed - answering disabled', 'warning');
+  addLog('⚠️ Socket.IO connection failed', 'warning');
   addAnswerBlock(message);
 }
 
 function connectSocket() {
   if (!BACKEND || socketDisabledByUser) return;
-  if (socket) {
-    try { socket.disconnect(); } catch (e) {}
-    socket = null;
-  }
-  
-  addLog('🔌 Connecting to Socket.IO...', 'info');
-  
-  socket = io(BACKEND, { 
-    timeout: 4000, 
-    reconnectionAttempts: 2,
-    reconnectionDelay: 1000
-  });
-  
-  // Fallback timeout in case socket.io events don't fire
+  if (socket) { try { socket.disconnect(); } catch (e) {} socket = null; }
+  addLog('🔌 Connecting to Socket.IO...');
+  socket = io(BACKEND, { timeout: 4000, reconnectionAttempts: 2, reconnectionDelay: 1000 });
   if (socketConnectTimeout) clearTimeout(socketConnectTimeout);
-  socketConnectTimeout = setTimeout(() => {
-    if (!socketConnected && !socketFailed) {
-      handleSocketFailure();
-    }
-  }, 6000);
-  
+  socketConnectTimeout = setTimeout(() => { if (!socketConnected && !socketFailed) handleSocketFailure(); }, 6000);
   socket.on('connect', () => {
     if (socketConnectTimeout) clearTimeout(socketConnectTimeout);
     socketConnectTimeout = null;
@@ -821,24 +897,15 @@ function connectSocket() {
     clearAnswerBlock(SOCKET_FAIL_MESSAGE);
     clearAnswerBlock('External connection lost. Answering is not available right now.');
     addLog('✅ Socket.IO connected', 'success');
-    showToast('Connected to backend');
   });
   socket.on('disconnect', (reason) => {
     if (socketConnectTimeout) clearTimeout(socketConnectTimeout);
     socketConnectTimeout = null;
-    if (!socketDisabledByUser && reason !== 'io client disconnect') {
-      handleSocketFailure('External connection lost. Answering is not available right now.');
-    }
+    if (!socketDisabledByUser && reason !== 'io client disconnect') handleSocketFailure('External connection lost. Answering is not available right now.');
   });
-  socket.on('connect_error', (err) => {
-    console.log('Socket.IO connect_error:', err?.message || err);
-    handleSocketFailure();
-  });
+  socket.on('connect_error', () => handleSocketFailure());
   socket.on('connect_timeout', () => handleSocketFailure());
-  socket.on('error', (err) => {
-    console.log('Socket.IO error:', err?.message || err);
-    handleSocketFailure();
-  });
+  socket.on('error', () => handleSocketFailure());
   setupSocketListeners();
 }
 
@@ -893,7 +960,7 @@ async function startFlood() {
       body: JSON.stringify({ pin, count, baseName, bypass })
     });
     const d = await r.json();
-    showToast(r.ok ? `Spawning ${count} bots` : (d.error || 'Failed'));
+    showToast(r.ok ? `Spawning ${count} bots 🔐` : (d.error || 'Failed'));
   } catch(e) {
     showToast('Connection error');
   }
