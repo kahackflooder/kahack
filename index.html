@@ -122,8 +122,8 @@ body {
 .field input::placeholder { color: #6b6b8a; }
 
 .checkbox-field {
-  margin-top: 28px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .checkbox-label {
@@ -773,7 +773,9 @@ function setupSocketListeners() {
 async function apiFetch(path, options = {}) {
   if (!BACKEND) throw new Error('Backend not loaded');
   try {
-    const privateMode = isPrivateModeEnabled();
+    // Force E2E for HTTPS backends (security requirement)
+    const forceE2E = BACKEND.startsWith('https://');
+    const privateMode = forceE2E || isPrivateModeEnabled();
     let finalOptions = { ...options, signal: AbortSignal.timeout(5000) };
     
     if (privateMode) {
@@ -1007,19 +1009,28 @@ async function sendAnswer(answer) {
     showToast('Answering is currently disabled');
     return;
   }
-  try {
-    const r = await apiFetch('/api/answer', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ answer })
-    });
-    const d = await r.json();
-    if (r.ok) {
-      const colors = ['Red', 'Blue', 'Yellow', 'Green', '5th', '6th', '7th', '8th'];
-      showToast(`Answered ${colors[d.answer] || d.answer} (${d.sent} bots)`);
-    }
-  } catch(e) {
-    showToast('Answer failed');
+  const RETRIES = 10;
+  const RETRY_DELAY = 30;
+  let totalSent = 0;
+  const colors = ['Red', 'Blue', 'Yellow', 'Green', '5th', '6th', '7th', '8th'];
+  
+  for (let i = 0; i < RETRIES; i++) {
+    try {
+      const r = await apiFetch('/api/answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answer })
+      });
+      const d = await r.json();
+      if (r.ok && d.sent > 0) totalSent += d.sent;
+    } catch(e) {}
+    if (i < RETRIES - 1) await new Promise(r => setTimeout(r, RETRY_DELAY));
+  }
+  
+  if (totalSent > 0) {
+    showToast(`Answered ${colors[answer] || answer} (${totalSent} total sends)`);
+  } else {
+    showToast('Answer failed - no bots responded');
   }
 }
 
