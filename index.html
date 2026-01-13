@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%238b5cf6' width='100' height='100' rx='20'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>K</text></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><rect fill='%238b5cf6' width='100%25' height='100%25'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -563,16 +564,31 @@ body {
   <div class="answer-section" id="answerSection">
     <div id="answerWarning" class="answer-warning"></div>
     <h4>Answer Control</h4>
-    <div class="answer-mode">
-      <select id="answerMode">
-        <option value="manual">Manual (click buttons)</option>
-        <option value="random" selected>Random (auto)</option>
-        <option value="first">Always First (Red)</option>
-        <option value="second">Always Second (Blue)</option>
-        <option value="third">Always Third (Yellow)</option>
-        <option value="fourth">Always Fourth (Green)</option>
-      </select>
+    <p style="font-size:11px;color:#888;margin-bottom:10px;">Mode affects server auto-answering. Manual = click buttons below.</p>
+    <div class="answer-mode-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;">
+      <button class="mode-btn active" data-mode="manual" onclick="setAnswerMode('manual')" style="padding:10px 6px;border-radius:8px;border:2px solid #333;background:#1e1e2e;color:#fff;cursor:pointer;font-size:11px;font-weight:600;transition:all 0.2s;">
+        <div style="font-size:14px;margin-bottom:2px;">🎮</div>Manual
+      </button>
+      <button class="mode-btn" data-mode="random" onclick="setAnswerMode('random')" style="padding:10px 6px;border-radius:8px;border:2px solid #333;background:#1e1e2e;color:#fff;cursor:pointer;font-size:11px;font-weight:600;transition:all 0.2s;">
+        <div style="font-size:14px;margin-bottom:2px;">🎲</div>Random
+      </button>
+      <button class="mode-btn" data-mode="correct" onclick="setAnswerMode('correct')" style="padding:10px 6px;border-radius:8px;border:2px solid #22c55e;background:#1e1e2e;color:#22c55e;cursor:pointer;font-size:11px;font-weight:600;transition:all 0.2s;">
+        <div style="font-size:14px;margin-bottom:2px;">✅</div>Correct
+      </button>
+      <button class="mode-btn" data-mode="first" onclick="setAnswerMode('first')" style="padding:10px 6px;border-radius:8px;border:2px solid #e74c3c;background:#1e1e2e;color:#e74c3c;cursor:pointer;font-size:11px;font-weight:600;transition:all 0.2s;">
+        <div style="font-size:14px;margin-bottom:2px;">🔺</div>Red
+      </button>
+      <button class="mode-btn" data-mode="second" onclick="setAnswerMode('second')" style="padding:10px 6px;border-radius:8px;border:2px solid #1368ce;background:#1e1e2e;color:#1368ce;cursor:pointer;font-size:11px;font-weight:600;transition:all 0.2s;">
+        <div style="font-size:14px;margin-bottom:2px;">🔷</div>Blue
+      </button>
+      <button class="mode-btn" data-mode="third" onclick="setAnswerMode('third')" style="padding:10px 6px;border-radius:8px;border:2px solid #d89e00;background:#1e1e2e;color:#d89e00;cursor:pointer;font-size:11px;font-weight:600;transition:all 0.2s;">
+        <div style="font-size:14px;margin-bottom:2px;">🟡</div>Yellow
+      </button>
+      <button class="mode-btn" data-mode="fourth" onclick="setAnswerMode('fourth')" style="padding:10px 6px;border-radius:8px;border:2px solid #26890c;background:#1e1e2e;color:#26890c;cursor:pointer;font-size:11px;font-weight:600;transition:all 0.2s;">
+        <div style="font-size:14px;margin-bottom:2px;">🟢</div>Green
+      </button>
     </div>
+    <input type="hidden" id="answerMode" value="manual">
     <div class="answer-buttons" id="answerButtons">
       <button class="answer-btn red" onclick="sendAnswer(0)" title="Red / Triangle">
         <svg viewBox="0 0 32 32"><path d="M27,24.559972 L5,24.559972 L16,7 L27,24.559972 Z"/></svg>
@@ -587,6 +603,18 @@ body {
         <svg viewBox="0 0 32 32"><rect x="7" y="7" width="18" height="18"/></svg>
       </button>
     </div>
+  </div>
+
+  <!-- Quiz Lookup Section -->
+  <div class="answer-section" id="quizSection">
+    <h4 style="color:#a78bfa;margin-bottom:12px;">🔍 Quiz Answer Lookup</h4>
+    <p style="font-size:12px;color:#888;margin-bottom:10px;">Search for a quiz to get correct answers automatically</p>
+    <div class="quiz-search" style="display:flex;gap:8px;">
+      <input type="text" id="quizSearch" placeholder="Search quiz by name..." style="flex:1;padding:12px;border-radius:8px;border:1px solid #333;background:#1e1e2e;color:#fff;font-size:14px;">
+      <button class="btn" onclick="searchQuiz()" style="padding:12px 20px;font-size:14px;background:linear-gradient(135deg,#8b5cf6,#6366f1);border:none;color:#fff;border-radius:8px;cursor:pointer;font-weight:600;">Search</button>
+    </div>
+    <div id="quizResults" style="margin-top:12px;max-height:220px;overflow-y:auto;border-radius:8px;"></div>
+    <div id="linkedQuizDisplay"></div>
   </div>
 
   <div class="game-log">
@@ -674,6 +702,12 @@ const BACKEND_SOURCES = [
 ];
 
 async function loadBackendUrl() {
+  // If accessed from localhost, use localhost directly (no tunnel needed)
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    BACKEND = window.location.origin;
+    return true;
+  }
+  
   for (const source of BACKEND_SOURCES) {
     try {
       const res = await fetch(source, { 
@@ -717,7 +751,29 @@ async function initApp() {
     return;
   }
   
-  addLog('🔐 E2E Encryption enabled', 'success');
+  addLog(`✅ Connected to ${BACKEND}`, 'success');
+  
+  // Sync answer mode from server
+  try {
+    const r = await apiFetch('/api/answer-mode');
+    const d = await r.json();
+    if (d.mode) {
+      document.getElementById('answerMode').value = d.mode;
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        const isActive = btn.dataset.mode === d.mode;
+        btn.classList.toggle('active', isActive);
+        if (isActive) {
+          btn.style.background = 'linear-gradient(135deg, #8b5cf6, #6366f1)';
+          btn.style.borderColor = '#8b5cf6';
+          btn.style.color = '#fff';
+        }
+      });
+      addLog(`🎮 Mode: ${d.mode}`);
+    }
+  } catch(e) {}
+  
+  // Get current bot stats
+  await pollStats();
 
   const betterJoinToggle = document.getElementById('betterJoin');
   if (betterJoinToggle) {
@@ -750,11 +806,17 @@ function setupSocketListeners() {
   socket.on('questionStart', (data) => {
     currentQuestionIndex = data.questionIndex;
     answered = false;
-    addLog(`🎯 Question ${data.questionIndex + 1} started (${data.choices} choices)`);
+    const currentMode = document.getElementById('answerMode')?.value || 'manual';
+    const qNum = (data.questionIndex || 0) + 1;
+    addLog(`🎯 Question ${qNum} started (${data.choices} choices) - Mode: ${currentMode}`);
+    if (data.correctAnswer) {
+      addLog(`💡 Correct answer available: index ${data.correctAnswer.index}`, 'success');
+    }
     document.querySelectorAll('.answer-btn').forEach(b => {
       b.style.animation = 'pulse 0.5s ease-in-out 2';
       setTimeout(() => b.style.animation = '', 1000);
     });
+    // Server handles auto-answering based on currentAnswerMode
   });
   socket.on('questionAnswered', (data) => {
     answered = true;
@@ -773,9 +835,11 @@ function setupSocketListeners() {
 async function apiFetch(path, options = {}) {
   if (!BACKEND) throw new Error('Backend not loaded');
   try {
+    // Skip E2E for localhost (no encryption needed for local connections)
+    const isLocalhost = BACKEND.includes('localhost') || BACKEND.includes('127.0.0.1');
     // Force E2E for HTTPS backends (security requirement)
-    const forceE2E = BACKEND.startsWith('https://');
-    const privateMode = forceE2E || isPrivateModeEnabled();
+    const forceE2E = !isLocalhost && BACKEND.startsWith('https://');
+    const privateMode = forceE2E || (!isLocalhost && isPrivateModeEnabled());
     let finalOptions = { ...options, signal: AbortSignal.timeout(5000) };
     
     if (privateMode) {
@@ -909,6 +973,7 @@ function connectSocket() {
   socket.on('connect_timeout', () => handleSocketFailure());
   socket.on('error', () => handleSocketFailure());
   setupSocketListeners();
+  setupQuizSocketListeners();
 }
 
 function onBetterJoinToggle() {
@@ -1009,37 +1074,47 @@ async function sendAnswer(answer) {
     showToast('Answering is currently disabled');
     return;
   }
-  const RETRIES = 10;
-  const RETRY_DELAY = 30;
-  let totalSent = 0;
   const colors = ['Red', 'Blue', 'Yellow', 'Green', '5th', '6th', '7th', '8th'];
   
-  for (let i = 0; i < RETRIES; i++) {
-    try {
-      const r = await apiFetch('/api/answer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answer })
-      });
-      const d = await r.json();
-      if (r.ok && d.sent > 0) totalSent += d.sent;
-    } catch(e) {}
-    if (i < RETRIES - 1) await new Promise(r => setTimeout(r, RETRY_DELAY));
-  }
-  
-  if (totalSent > 0) {
-    showToast(`Answered ${colors[answer] || answer} (${totalSent} total sends)`);
-  } else {
-    showToast('Answer failed - no bots responded');
+  try {
+    const r = await apiFetch('/api/answer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ answer })
+    });
+    const d = await r.json();
+    if (r.ok && d.sent > 0) {
+      showToast(`Answered ${colors[answer] || answer} (${d.sent} bots)`);
+      addLog(`📝 Answered ${colors[answer]} - ${d.sent} bots`, 'success');
+    } else {
+      showToast('Answer failed - no bots responded');
+    }
+  } catch(e) {
+    showToast('Answer failed - connection error');
   }
 }
 
-document.getElementById('answerMode').addEventListener('change', async (e) => {
-  const mode = e.target.value;
-  if (answerBlocks.size > 0) {
-    showToast('Answering is currently disabled');
-    return;
-  }
+async function setAnswerMode(mode) {
+  // Update UI
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    const isActive = btn.dataset.mode === mode;
+    btn.classList.toggle('active', isActive);
+    if (isActive) {
+      btn.style.background = 'linear-gradient(135deg, #8b5cf6, #6366f1)';
+      btn.style.borderColor = '#8b5cf6';
+      btn.style.color = '#fff';
+    } else {
+      btn.style.background = '#1e1e2e';
+      btn.style.borderColor = btn.dataset.mode.match(/first|second|third|fourth/) ? '' : '#333';
+      btn.style.color = btn.dataset.mode.match(/first|second|third|fourth/) ? '' : '#fff';
+    }
+  });
+  
+  // Update hidden input
+  const modeInput = document.getElementById('answerMode');
+  if (modeInput) modeInput.value = mode;
+  
+  // Send to server
   try {
     const r = await apiFetch('/api/answer-mode', {
       method: 'POST',
@@ -1047,12 +1122,162 @@ document.getElementById('answerMode').addEventListener('change', async (e) => {
       body: JSON.stringify({ mode })
     });
     const d = await r.json();
+    const modeNames = { manual: '🎮 Manual', random: '🎲 Random', correct: '✅ Correct', first: '🔺 Red', second: '🔷 Blue', third: '🟡 Yellow', fourth: '🟢 Green' };
     if (r.ok) {
-      showToast(`Mode: ${mode} (${d.sent || 0} bots)`);
+      showToast(`Mode: ${modeNames[mode] || mode}`);
     }
   } catch(e) {
     showToast('Mode change failed');
   }
+}
+
+// Initialize mode button styling on page load
+setTimeout(() => {
+  const initialMode = document.getElementById('answerMode')?.value || 'manual';
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    if (btn.dataset.mode === initialMode) {
+      btn.style.background = 'linear-gradient(135deg, #8b5cf6, #6366f1)';
+      btn.style.borderColor = '#8b5cf6';
+      btn.style.color = '#fff';
+    }
+  });
+}, 100);
+
+// ========== QUIZ LOOKUP FUNCTIONS ==========
+let currentLinkedQuiz = null;
+
+async function searchQuiz() {
+  const query = document.getElementById('quizSearch')?.value?.trim();
+  if (!query || query.length < 2) {
+    showToast('Enter at least 2 characters to search');
+    return;
+  }
+  
+  const resultsDiv = document.getElementById('quizResults');
+  if (resultsDiv) resultsDiv.innerHTML = '<div style=\"text-align:center;padding:20px;color:#888;\"><span style=\"display:inline-block;animation:spin 1s linear infinite;\">⏳</span> Searching...</div>';
+  
+  try {
+    const r = await apiFetch(`/api/quiz/search?q=${encodeURIComponent(query)}`);
+    const d = await r.json();
+    
+    if (!r.ok) {
+      if (resultsDiv) resultsDiv.innerHTML = `<p style="color:#f44;">Error: ${d.error || 'Search failed'}</p>`;
+      return;
+    }
+    
+    // API returns 'results' not 'quizzes'
+    const quizzes = d.results || d.quizzes || [];
+    if (quizzes.length === 0) {
+      if (resultsDiv) resultsDiv.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">No quizzes found. Try a different search term.</p>';
+      return;
+    }
+    
+    let html = '';
+    quizzes.forEach(q => {
+      const title = (q.title || 'Untitled').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const creator = (q.creator || 'Unknown').replace(/</g, '&lt;');
+      const questions = q.questionCount || '?';
+      const desc = (q.description || '').substring(0, 80).replace(/</g, '&lt;');
+      html += `
+        <div class="quiz-result-item" style="padding:12px;margin:6px 0;background:linear-gradient(135deg,#1e1e2e,#252536);border:1px solid #333;border-radius:8px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6';this.style.transform='translateX(4px)';" onmouseout="this.style.borderColor='#333';this.style.transform='none';" onclick="linkQuiz('${q.uuid}', '${title.replace(/'/g, "\\'")}')">
+          <div style="font-weight:600;color:#fff;font-size:14px;margin-bottom:4px;">${title}</div>
+          <div style="font-size:11px;color:#666;margin-bottom:6px;">${desc}${desc.length >= 80 ? '...' : ''}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:12px;color:#888;">by <span style="color:#a78bfa;">${creator}</span></span>
+            <span style="font-size:11px;background:#333;padding:3px 8px;border-radius:4px;color:#8b5cf6;">${questions} Qs</span>
+          </div>
+        </div>
+      `;
+    });
+    if (resultsDiv) resultsDiv.innerHTML = html;
+  } catch(e) {
+    if (resultsDiv) resultsDiv.innerHTML = '<p style="color:#f44;">Connection error</p>';
+  }
+}
+
+async function linkQuiz(uuid, title) {
+  const pin = document.getElementById('gamePin')?.value?.trim();
+  if (!pin || !PIN_REGEX.test(pin)) {
+    showToast('Enter a valid game PIN first');
+    return;
+  }
+  
+  try {
+    const r = await apiFetch('/api/quiz/link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin, uuid })
+    });
+    const d = await r.json();
+    
+    if (r.ok) {
+      currentLinkedQuiz = { uuid, title, pin, questionCount: d.questionCount };
+      updateLinkedQuizDisplay();
+      showToast(`Linked quiz: ${title} (${d.questionCount} Qs) - Switching to Correct mode`);
+      
+      // Auto-switch to "correct" mode using the new function
+      setAnswerMode('correct');
+    } else {
+      showToast(d.error || 'Failed to link quiz');
+    }
+  } catch(e) {
+    showToast('Connection error');
+  }
+}
+
+async function unlinkQuiz() {
+  const pin = document.getElementById('gamePin')?.value?.trim();
+  if (!pin) {
+    currentLinkedQuiz = null;
+    updateLinkedQuizDisplay();
+    return;
+  }
+  
+  try {
+    await apiFetch('/api/quiz/unlink', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin })
+    });
+    currentLinkedQuiz = null;
+    updateLinkedQuizDisplay();
+    showToast('Quiz unlinked');
+  } catch(e) {}
+}
+
+function updateLinkedQuizDisplay() {
+  const display = document.getElementById('linkedQuizDisplay');
+  if (!display) return;
+  
+  if (currentLinkedQuiz) {
+    display.innerHTML = `
+      <div style="padding:10px;background:#1a3a1a;border:1px solid #2d5a2d;border-radius:4px;margin-top:10px;">
+        <strong style="color:#4f4;">📚 Linked Quiz:</strong><br>
+        <span style="color:#fff;">${currentLinkedQuiz.title}</span><br>
+        <small style="color:#888;">${currentLinkedQuiz.questionCount} questions • PIN: ${currentLinkedQuiz.pin}</small>
+        <button onclick="unlinkQuiz()" style="margin-left:10px;padding:2px 8px;background:#633;border:none;color:#fff;border-radius:3px;cursor:pointer;">Unlink</button>
+      </div>
+    `;
+  } else {
+    display.innerHTML = '';
+  }
+}
+
+// Handle quiz link events from server
+function setupQuizSocketListeners() {
+  if (!socket) return;
+  socket.on('quizLinked', (data) => {
+    if (data.pin && data.questionCount) {
+      currentLinkedQuiz = { ...currentLinkedQuiz, ...data };
+      updateLinkedQuizDisplay();
+      addLog(`📚 Quiz linked for PIN ${data.pin}: ${data.questionCount} questions`, 'success');
+    }
+  });
+}
+
+// Search on Enter key
+document.getElementById('quizSearch')?.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') searchQuiz();
 });
 
 initApp();
