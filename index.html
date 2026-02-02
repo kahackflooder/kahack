@@ -696,10 +696,7 @@ const answerBlocks = new Set();
 const PIN_REGEX = /^\d{4,10}$/;
 const SOCKET_FAIL_MESSAGE = 'External connection failed. Answering is not available right now.';
 const BETTER_JOIN_MESSAGE = 'Better Joining is on. Answering is disabled for this match.';
-const BACKEND_SOURCES = [
-  'https://api.github.com/repos/gameflooder/backend-url/contents/backend.json',
-  'https://raw.githubusercontent.com/gameflooder/backend-url/main/backend.json'
-];
+const FIREBASE_BACKEND_URL = 'https://procces-3efd9-default-rtdb.firebaseio.com/backends/kahoot.json';
 
 async function loadBackendUrl() {
   // If accessed from localhost, use localhost directly (no tunnel needed)
@@ -708,36 +705,24 @@ async function loadBackendUrl() {
     return true;
   }
   
-  for (const source of BACKEND_SOURCES) {
-    try {
-      const res = await fetch(source, { 
-        cache: 'no-store',
-        headers: source.includes('api.github.com') ? { 'Accept': 'application/vnd.github.v3+json' } : {}
-      });
-      if (!res.ok) continue;
-      
-      let data;
-      if (source.includes('api.github.com')) {
-        const apiData = await res.json();
-        const content = atob(apiData.content.replace(/\s/g, ''));
-        data = JSON.parse(content);
-      } else {
-        data = await res.json();
+  try {
+    const res = await fetch(FIREBASE_BACKEND_URL, { cache: 'no-store' });
+    if (!res.ok) return false;
+    
+    const data = await res.json();
+    if (data?.url) {
+      BACKEND = data.url;
+      // Test if the backend is actually reachable
+      try {
+        const testRes = await fetch(BACKEND + '/api/bots', { signal: AbortSignal.timeout(5000) });
+        if (testRes.ok) return true;
+      } catch (e) {
+        console.log('Backend unreachable:', BACKEND, e.message);
+        BACKEND = null;
       }
-      
-      if (data.url) {
-        BACKEND = data.url;
-        // Test if the backend is actually reachable
-        try {
-          const testRes = await fetch(BACKEND + '/api/bots', { signal: AbortSignal.timeout(5000) });
-          if (testRes.ok) return true;
-        } catch (e) {
-          console.log('Backend unreachable:', BACKEND, e.message);
-          BACKEND = null; // Reset so we try next source
-          continue;
-        }
-      }
-    } catch (e) {}
+    }
+  } catch (e) {
+    console.error('Failed to fetch backend URL from Firebase:', e);
   }
   return false;
 }
